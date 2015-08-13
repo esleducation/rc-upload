@@ -8,31 +8,32 @@ var formStyle = {
   top: 0
 };
 var boxStyle = {
-  position: 'relative'
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%'
 };
 var inputStyle = {
   position: 'absolute',
   filter: 'alpha(opacity=0)',
+  opacity: 0.01,
   outline: 0,
-  right: 0,
-  top: 0,
-  fontSize: 100
+  left: '-1000px',
+  top: '-1000px',
+  fontSize: 12
 };
 
 var IframeUploader = React.createClass({
 
   getInitialState: function() {
     return {
-      width: 20, height: 12, uid: 1
+      uid: 1
     };
   },
 
   componentDidMount: function() {
     var el = React.findDOMNode(this);
-    this.setState({
-      width: el.offsetWidth,
-      height: el.offsetHeight
-    });
   },
 
   _getName: function() {
@@ -48,8 +49,13 @@ var IframeUploader = React.createClass({
     var iframe = e.target;
     var props = this.props;
     try {
-      var response = iframe.contentDocument.body.innerHTML;
-      props.onSuccess(response);
+      var response = JSON.parse(iframe.contentDocument.body.innerText);
+
+      if( ! response.response.success) {
+        props.onError(response);
+      } else {
+        props.onSuccess(response);
+      }
     } catch (err) {
       response = 'cross-domain';
       props.onError(err);
@@ -74,37 +80,45 @@ var IframeUploader = React.createClass({
     );
   },
 
-  _onChange: function() {
+  _onChange: function(e) {
     this.startUpload = true;
-    React.findDOMNode(this.refs.form).submit();
+
+    React.findDOMNode(this.refs['form']).submit();
+  },
+
+  _triggerFilInput: function() {
+    this.refs['file'].getDOMNode().click();
   },
 
   render: function() {
-    var props = this.props;
-    var state = this.state;
-    inputStyle.height = state.height;
-    inputStyle.fontSize = Math.max(64, state.height * 5);
-    formStyle.width = state.width;
-    formStyle.height = state.height;
-
     var iframeName = this._getName();
     var iframe = this._getIframe();
 
     return (
-      <span style={boxStyle}>
-        <form action={props.action}
+      <span style={boxStyle} onClick={this._triggerFilInput}>
+        <form action={this.props.action}
           target={iframeName}
           encType="multipart/form-data"
           ref="form"
           method="post" style={formStyle}>
-          <input type="file"
+
+          <input type="file" ref="file"
+            name={this.props.name}
             style={inputStyle}
-            accept={props.accept}
+            accept={this.props.accept}
             onChange={this._onChange}
           />
+
+          {
+            Object.keys(this.props.data).map(function(name, index){
+              return (
+                <input key={index} type="hidden" name={name} value={this.props.data[name]} />
+              );
+            }.bind(this))
+          }
         </form>
         {iframe}
-        {props.children}
+        {this.props.children}
       </span>
     );
   }
