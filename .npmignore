@@ -23,7 +23,5 @@ node_modules
 .cache
 examples
 tests
-src
-/index.js
 .*
 assets/**/*.less
