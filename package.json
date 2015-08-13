@@ -51,7 +51,8 @@
     "precommit-hook": "1.x",
     "rc-server": "3.x",
     "rc-tools": "3.x",
-    "react": "0.13.x"
+    "react": "0.13.x",
+    "notifier": "esleducation/notifier#1.0.2"
   },
   "precommit": [
     "precommit"
