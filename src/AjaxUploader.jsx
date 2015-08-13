@@ -1,10 +1,8 @@
 'use strict';
 var React = require('react');
-var request = require('superagent');
+//var request = require('superagent');
+var request = require('../../../assets-src/js/helpers/request')
 
-function uid() {
-  return Math.random().toString().slice(2);
-}
 
 var AjaxUploader = React.createClass({
 
@@ -34,31 +32,21 @@ var AjaxUploader = React.createClass({
 
   _post: function(file) {
 
-    file.uid = uid();
     var props = this.props;
+
     props.onStart(file);
-    var req = request
-      .post(props.action)
-      .attach(props.name, file, file.name);
 
-    for (var key in props.data) {
-      req.field(key, props.data[key]);
-    }
+    // File object
+    var files = {};
+    files[props.name] = file;
 
-    var progress = function(e) {
-      props.onProgress(e, file);
-    };
-
-    req.on('progress', progress);
-
-    req.end(function(err, ret) {
-      req.off('progress', progress);
-      if (err || ret.status !== 200) {
-        props.onError(err, ret, file);
-        return;
-      }
-
-      props.onSuccess(ret.body || ret.text, file);
+    var req = request.api(props.action, {
+      files : files,
+      method : 'POST'
+    }).then(function(response){
+      props.onSuccess(response.response, file);
+    }, function(error){
+      props.onError(error, file)
     });
   },
 

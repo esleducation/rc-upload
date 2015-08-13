@@ -34,6 +34,17 @@
     "browser-test": "node --harmony node_modules/.bin/rc-tools run browser-test",
     "browser-test-cover": "node --harmony node_modules/.bin/rc-tools run browser-test-cover"
   },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ],
+      "envify"
+    ]
+  },
   "devDependencies": {
     "co-busboy": "^1.3.0",
     "expect.js": "0.3.x",
