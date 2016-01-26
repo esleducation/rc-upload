@@ -1,6 +1,6 @@
 'use strict';
 var React = require('react');
-//var request = require('superagent');
+var ReactDOM = require('react-dom');
 var request = require('../../../assets-src/js/helpers/request')
 
 
@@ -12,7 +12,7 @@ var AjaxUploader = React.createClass({
   },
 
   _onClick: function() {
-    var el = React.findDOMNode(this.refs.file);
+    var el = ReactDOM.findDOMNode(this.refs.file);
     if (!el) {
       return;
     }
