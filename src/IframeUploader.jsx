@@ -105,7 +105,7 @@ var IframeUploader = React.createClass({
     var iframeName = this._getName();
     var iframe = this._getIframe();
 
-    console.log('DEBUG render action:', misc.url.api(this.props.action);
+    console.log('DEBUG render action:', misc.url.api(this.props.action));
 
     return (
       <span style={boxStyle} onClick={this._triggerFillInput}>
