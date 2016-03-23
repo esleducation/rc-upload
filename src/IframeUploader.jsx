@@ -47,7 +47,8 @@ var IframeUploader = React.createClass({
     var props = this.props;
     var response;
     try {
-    console.log('DEBUG rc-upload, IframeUploader');
+        console.log('DEBUG rc-upload, IframeUploader iframe', iframe);
+        console.log('DEBUG rc-upload, IframeUploader innerText', iframe.contentDocument.body.innerText);
       response = JSON.parse(iframe.contentDocument.body.innerText).response;
 
       // Set CSRF
