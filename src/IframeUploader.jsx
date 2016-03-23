@@ -93,7 +93,6 @@ var IframeUploader = React.createClass({
     this.startUpload = true;
     this.file = (e.target.files && e.target.files[0]) || e.target;
     this.props.onStart(this.file);
-    console.log('DEBUG: On change is called');
     ReactDOM.findDOMNode(this.refs['form']).submit();
   },
 
@@ -104,8 +103,6 @@ var IframeUploader = React.createClass({
   render: function() {
     var iframeName = this._getName();
     var iframe = this._getIframe();
-
-    console.log('DEBUG render action:', misc.url.api(this.props.action));
 
     return (
       <span style={boxStyle} onClick={this._triggerFillInput}>
