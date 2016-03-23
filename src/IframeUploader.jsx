@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var misc = require('../../../assets-src/js/helpers/misc');
 var AppStore = require('../../../assets-src/js/stores/AppStore');
 var Notifier = require('notifier');
@@ -30,7 +31,7 @@ var inputStyle = {
 var IframeUploader = React.createClass({
 
   componentDidMount: function() {
-    var el = React.findDOMNode(this);
+    var el = ReactDOM.findDOMNode(this);
   },
 
   _getName: function() {
@@ -48,11 +49,8 @@ var IframeUploader = React.createClass({
     var response;
     try {
        var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        console.log('DEBUG rc-upload, iframeDocument', iframeDocument);
-        console.log('DEBUG rc-upload, iframeDocument.body', iframeDocument.body);
-        console.log('DEBUG rc-upload, iframeDocument.body.innerText', iframeDocument.body.innerText);
-        console.log('DEBUG rc-upload, iframeDocument.body.textContent', iframeDocument.body.textContent);
-      response = JSON.parse(iframeDocument.body.textContent || iframeDocument.body.innerText).response;
+       var content = iframeDocument.body.textContent || iframeDocument.body.innerText;
+      response = JSON.parse(content).response;
 
       // Set CSRF
       AppStore.setCSRF(response.csrf);
@@ -95,11 +93,12 @@ var IframeUploader = React.createClass({
     this.startUpload = true;
     this.file = (e.target.files && e.target.files[0]) || e.target;
     this.props.onStart(this.file);
-    React.findDOMNode(this.refs['form']).submit();
+    console.log('DEBUG: On change is called');
+    ReactDOM.findDOMNode(this.refs['form']).submit();
   },
 
   _triggerFillInput: function() {
-    this.refs['file'].getDOMNode().click();
+    ReactDOM.findDOMNode(this.refs['file']).click();
   },
 
   render: function() {
