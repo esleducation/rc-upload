@@ -51,7 +51,8 @@ var IframeUploader = React.createClass({
         console.log('DEBUG rc-upload, iframeDocument', iframeDocument);
         console.log('DEBUG rc-upload, iframeDocument.body', iframeDocument.body);
         console.log('DEBUG rc-upload, iframeDocument.body.innerText', iframeDocument.body.innerText);
-      response = JSON.parse(iframeDocument.body.innerText).response;
+        console.log('DEBUG rc-upload, iframeDocument.body.textContent', iframeDocument.body.textContent);
+      response = JSON.parse(iframeDocument.body.textContent || iframeDocument.body.innerText).response;
 
       // Set CSRF
       AppStore.setCSRF(response.csrf);
